@@ -8,7 +8,7 @@ if($mt == 1) {
 
 $config['web'] = array(
 	'name' => 'Sunyoruri Store',
-    'url' => 'http://localhost/'
+    'url' => 'http://localhost/project_toko/'
 );	
 $config['db'] = array(
 	'host' => 'localhost',

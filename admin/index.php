@@ -9,11 +9,16 @@ if (!$_SESSION["is_login"] === TRUE) {
     header("location: ../login.php");
     exit;
 }
+if ($_SESSION['name']['hak_akses'] !== 'admin') {
+    header("location: ../index.php");
+    exit;
+}
 ?>
-<?php
-$cek_akun = mysqli_query($conn, "SELECT * FROM users ");
-while ($data_akun = mysqli_fetch_assoc($cek_akun)) {
-?>
+		<?php
+			$nama = $_SESSION['name']['nama'];
+			$cek_akun = mysqli_query($conn, "SELECT * FROM users WHERE nama = '$nama'");
+			$data_akun = mysqli_fetch_assoc($cek_akun);{
+		?>
 <span class="badge bg-primary">Welcome! <?php echo $data_akun['nama']; ?></b> Anda telah login sebagai <b><?php echo $data_akun['hak_akses']; ?></b> </span>
                <?php
                } 

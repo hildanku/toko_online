@@ -1,0 +1,2 @@
+fix Welcome ( salah query )
+fix adnin page ( jika user bukan adnin naka redirect to index
