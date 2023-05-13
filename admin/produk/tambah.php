@@ -10,7 +10,7 @@ require '../../lib/header.php';
               Tambah Produk
             </div>
             <div class="card-body">
-              <form action="p_tambah.php" method="POST"enctype="multipart/form-data">
+              <form action="proses/tambah.php" method="POST"enctype="multipart/form-data">
                 
                 <div class="form-group">
                   <label>Nama Produk</label>

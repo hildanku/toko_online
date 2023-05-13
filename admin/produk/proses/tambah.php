@@ -1,51 +1,49 @@
 <?php 
 require '../../../conf.php';
 require '../../../lib/header.php';
-          if(isset($_POST["submit"])) {
-            $nama_produk = $_POST["nama"];
-            $deskripsi_produk = $_POST["deskripsi"];
-            $ukuran_produk = $_POST["ukuran"];
-            $harga_produk = $_POST["harga"];
-            $status_produk = $_POST["status"];
-            $tanggal_input = date('Y-m-d H:i:s');
-            
-            $ext_diijinkan = array('png','jpg','jpeg');
-            $foto = $_FILES['foto']['name'];
-            $pecah = explode('.', $foto);
-            $ext_filtrasi = strtolower(end($pecah));
-             /* fungsi strtolower yaitu menjadikan setiap string menjadi huruf kecil,
-                Contoh studi kasusnya adalah
-                kita  mengupload gambar dengan nama dan ekstensi yang benar, contoh gambar.JPG
-                nah karena ekstensi yang hanya kita perbolehkan hanya 3 ekstensi pada line 12, maka
-                JPG tidak masuk ke dalam daftar ekstensi yang diijinkan, maka dari kita harus memvalidasi
-                menggunakan function strtolower
-             */
-            $ukuran = $_FILES['foto']['size'];
-            $file_tmp = $_FILES['foto']['tmp_name'];
-            $err = $_FILES['foto']['error'];
-            if($err === 4){
-                echo "<p>Pilih file dulu</p>";
-            }
-            if(in_array($ext_filtrasi,$ext_diijinkan) === false ){
-                echo "<p>Ekstensi tidak diijinkan</p>";
-                die;
-                $kodeajaib = uniqid();
-                $kodeajaib .= '.';
-                $kodeajaib .=  $ext_filtrasi;
-                if($ukuran < 1044070){
-                    move_uploaded_file($file_tmp, '../../assets/img/produk/'.$kodeajaib);
-                }
-            }
+require '../../../lib/function.php';
 
+        if(isset($_POST["submit"])) {
+          $nama_produk = filter($_POST["nama"]);
+          $deskripsi_produk = filter($_POST["deskripsi"]);
+          $ukuran_produk = filter($_POST["ukuran"]);
+          $harga_produk = filter($_POST["harga"]);
+          $status_produk = filter($_POST["status"]);
+          $tanggal_input = date('Y-m-d H:i:s');
+
+          $ext_diijinkan = array('png','jpg','jpeg');
+          $foto = $_FILES['foto']['name'];
+          $pecah = explode('.', $foto);
+          $ext_filtrasi = strtolower(end($pecah));
+
+          $ukuran = $_FILES['foto']['size'];
+          $file_tmp = $_FILES['foto']['tmp_name'];
+          $err = $_FILES['foto']['error'];
+
+          if($err === 4){
+              echo "<p>Pilih file dulu</p>";
           }
-          $input = "INSERT into produk VALUES ('','$nama_produk','$deskripsi_produk','$ukuran_produk','$harga_produk','$status_produk','$foto','$tanggal_input')";
-          if(mysqli_query($conn, $input)){
-            echo "Data Sukses di input";
-            exit();
-          } else {
-            echo mysqli_error($conn);
-            
+
+          if(in_array($ext_filtrasi,$ext_diijinkan) === false ){
+              echo "<p>Ekstensi tidak diijinkan</p>";
+              die;
           }
+
+          $kodeajaib = uniqid();
+          $kodeajaib .= '.';
+          $kodeajaib .=  $ext_filtrasi;
+          if($ukuran < 1044070){
+              move_uploaded_file($file_tmp, '../../assets/img/produk/'.$kodeajaib);
+          }
+        }
+
+        $input = "INSERT into produk VALUES ('','$nama_produk','$deskripsi_produk','$ukuran_produk','$harga_produk','$status_produk','$kodeajaib','$tanggal_input')";
+        if(mysqli_query($conn, $input)){
+          echo "Data Sukses di input";
+          exit();
+        } else {
+          echo mysqli_error($conn);
+        }
 /*
 Referensi Upload File
 https://www.malasngoding.com/membuat-upload-file-dengan-php-dan-mysql/
